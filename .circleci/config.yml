@@ -37,7 +37,7 @@ jobs:
          command: npm run build
       - run:
           name: Deply Netlify
-          command: npx netlify deplay --prod --dir=build
+          command: npx netlify deploy --prod --dir=build
 
 
 
