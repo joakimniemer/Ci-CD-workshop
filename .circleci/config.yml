@@ -9,7 +9,7 @@ orbs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  test-and-deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - node/test:
@@ -19,3 +19,25 @@ workflows:
           version: '19.8.1'
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
+      - build-and-deploy:
+          requires:
+            - node/test
+          
+
+jobs:
+  build-and-deploy:
+    executor:
+      name: node/default
+      tag: '19.8.1'
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+         name: Build
+         command: npm run build
+      - run:
+          name: Deply Netlify
+          command: npx netlify deplay --prod --dir=build
+
+
+
